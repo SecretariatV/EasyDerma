@@ -1,0 +1,7 @@
+flask==2.3.3
+python-dotenv
+pyjwt
+flask-cors
+six
+pymongo[srv]
+python-dotenv
