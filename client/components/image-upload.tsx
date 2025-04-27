@@ -79,6 +79,7 @@ export function ImageUpload({
         </Label>
           <Input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} /> </>) : 
         (<AuthButtons
+          label="Log In To Upload"
           isMorning={isMorning}
           isAuthenticated={isAuthenticated}
           loginWithRedirect={loginWithRedirect}
