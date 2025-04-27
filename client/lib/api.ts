@@ -94,7 +94,15 @@ export function useTodosAPI() {
                 body: JSON.stringify(todo),
             })
             return response.json()
+        },
+        deleteAll: async () => {
+            const response = await fetch(`${API_URL}/todos`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${await auth0.getAccessTokenSilently()}`,
+                },
+            })
+            return response.json()
         }
-        
     }
 }

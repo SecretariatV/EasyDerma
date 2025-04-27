@@ -35,7 +35,24 @@ export default function Home(){
   async function onLogin() {
     const lastData = await analysisAPI.last()
     setData(lastData)
-    console.log("data", lastData);
+    const todoList: Todo[] = []
+    if(lastData){
+      for(const todo of lastData.generated.skin_care_product_list_morning){
+        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "morning" })
+      }
+      for(const todo of lastData.generated.skin_care_product_list_night){
+        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "night" })
+      }
+    }
+    setTodos(todoList);
+    const base64Image = lastData?.image;
+    console.log("base64Image", base64Image)
+    if (base64Image) {
+      const imageBlob = await fetch(base64Image).then((res) => res.blob())
+      const url = URL.createObjectURL(imageBlob)
+      setImageUrl(url)
+    }
+    setIsImageUploaded(true);
   }
 
   useEffect(() => {
@@ -48,7 +65,6 @@ export default function Home(){
     setImageUrl(url)
     const newData = await analysisAPI.create(file)
     setData(newData)
-    console.log("data", newData);
     const todoList: Todo[] = []
     if(newData){
       for(const todo of newData.generated.skin_care_product_list_morning){
@@ -100,7 +116,7 @@ export default function Home(){
           isAuthenticated={isAuthenticated}
         />
 
-        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Diagnosis details" cardDescription={data ? data.generated.diagnosis : ""}/>
+        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Diagnosis details" cardDescription={data?.generated.diagnosis ?? ""}/>
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
           <ImageUpload
