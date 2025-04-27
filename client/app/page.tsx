@@ -34,17 +34,17 @@ export default function Home() {
 
   async function onLogin() {
     setIsLoading(true);
-    const lastData = await analysisAPI.last()
+    const lastData = await analysisAPI.last();
     setIsLoading(false);
-    setData(lastData)
-    const todoList: Todo[] = await todosAPI.get()
+    setData(lastData);
+    const todoList: Todo[] = await todosAPI.get();
     setTodos(todoList);
     const base64Image = lastData?.image;
-    console.log("base64Image", base64Image)
+    console.log("base64Image", base64Image);
     if (base64Image) {
-      const imageBlob = await fetch(base64Image).then((res) => res.blob())
-      const url = URL.createObjectURL(imageBlob)
-      setImageUrl(url)
+      const imageBlob = await fetch(base64Image).then((res) => res.blob());
+      const url = URL.createObjectURL(imageBlob);
+      setImageUrl(url);
       setIsImageUploaded(true);
     }
   }
@@ -69,42 +69,48 @@ export default function Home() {
         text: text,
         completed: false,
         time: type,
-      }
+      };
 
-      const {id} = await todosAPI.add(todoObj as Todo);
+      const { id } = await todosAPI.add(todoObj as Todo);
       todoList.push({
         ...todoObj,
         id: id,
       } as Todo);
     }
 
-    todosAPI.deleteAll()
+    todosAPI.deleteAll();
 
     if (newData) {
       await Promise.all(
-        newData.generated.skin_care_product_list_morning.map((todo) => addTodo(todo, "morning"))
-      )
+        newData.generated.skin_care_product_list_morning.map((todo) =>
+          addTodo(todo, "morning")
+        )
+      );
 
       await Promise.all(
-        newData.generated.skin_care_product_list_night.map((todo) => addTodo(todo, "night"))
-      )
+        newData.generated.skin_care_product_list_night.map((todo) =>
+          addTodo(todo, "night")
+        )
+      );
     }
     setTodos(todoList);
-    
-    setIsImageUploaded(true)
-  }
+
+    setIsImageUploaded(true);
+  };
 
   const toggleTodo = (id: number) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === id) {
-        todosAPI.update("" + id, { ...todo, completed: !todo.completed });
-        return { ...todo, completed: !todo.completed };
-      } else {
-        return todo;
-      }
-    }));
-    setShowSaveNotification(true)
-  }
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === id) {
+          todosAPI.update("" + id, { ...todo, completed: !todo.completed });
+          return { ...todo, completed: !todo.completed };
+        } else {
+          return todo;
+        }
+      })
+    );
+    setShowSaveNotification(true);
+  };
 
   const handleThemeChange = (mode: ThemeMode) => {
     setThemeMode(mode);
@@ -151,42 +157,55 @@ export default function Home() {
             />
           </div>
         </div>
-        <Article
-          themeMode={themeMode}
-          isImageUploaded={isImageUploaded}
-          cardHeader="Skin care instructions"
-          cardDescription={
-            data ? data.generated.skin_care_usage_instructions : ""
-          }
-        />
+        {data && data.generated.skin_care_usage_instructions.length > 0 && (
+          <Article
+            themeMode={themeMode}
+            isImageUploaded={isImageUploaded}
+            cardHeader="Skin care instructions"
+            cardDescription={
+              data ? data.generated.skin_care_usage_instructions : ""
+            }
+          />
+        )}
+
         {data && data.generated.lunch.length > 0 && (
           <InfoSection themeMode={themeMode} data={data} />
         )}
 
-        <Article
-          themeMode={themeMode}
-          isImageUploaded={isImageUploaded}
-          cardHeader="Our Raw AI Model's Prediction"
-          cardDescription=
-          {data && <div className="flex-col w-full">
-            {data.predictions.map((prediction, i) => (
-              <div key={i} className="flex flex-col">
-                <div
-                  className="border-blue-500 border-b-4 rounded-t h-10 whitespace-nowrap flex ml-4 items-center"
-                  style={{
-                    width: `${prediction.probability * 100}%`,
-                  }}
-                >
-                  {prediction.name + " " + Math.round(prediction.probability * 100) + "%"}
+        {data && data.generated.skin_care_usage_instructions.length > 0 && (
+          <Article
+            themeMode={themeMode}
+            isImageUploaded={isImageUploaded}
+            cardHeader="Our Convolutional Neural Network AI Model's Prediction"
+            cardDescription={
+              data && (
+                <div className="flex-col w-full">
+                  {data.predictions.map((prediction, i) => (
+                    <div key={i} className="flex flex-col">
+                      <div
+                        className="border-blue-500 border-b-4 rounded-t h-10 whitespace-nowrap flex ml-4 items-center"
+                        style={{
+                          width: `${prediction.probability * 100}%`,
+                        }}
+                      >
+                        {prediction.name +
+                          " " +
+                          Math.round(prediction.probability * 100) +
+                          "%"}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>}
-        />
+              )
+            }
+          />
+        )}
       </div>
-      {isLoading && <div className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 flex items-center justify-center">
-        <p className="text-3xl text-white animate-pulse">Loading...</p>
-      </div>}
+      {isLoading && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 flex items-center justify-center">
+          <p className="text-3xl text-white animate-pulse">Loading...</p>
+        </div>
+      )}
     </main>
   );
 }
