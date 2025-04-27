@@ -106,7 +106,7 @@ export default function Home(){
           </div>
         </div>
         <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Skin care instructions" cardDescription={data ? data.generated.skin_care_usage_instructions : ""}/>
-        <InfoSection themeMode={themeMode} />
+        {data && <InfoSection themeMode={themeMode} data={data} />}
       </div>
     </main>
   )
