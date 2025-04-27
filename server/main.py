@@ -1,9 +1,10 @@
+import json
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
-from auth import AuthError, requires_auth
-from db import recommendations
-from gemini import generate_response_with_image
-from predict import model_predict
+from server.auth.auth import AuthError, requires_auth
+from server.db.db import recommendations
+from server.models.gemini import generate_response_with_image
+from server.ai_utils.utils import generate_prompt, model_predict
 
 app = Flask(__name__)
 
@@ -12,18 +13,6 @@ def handle_auth_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code
     return response
-
-@app.route("/private")
-@cross_origin(headers=["Content-Type", "Authorization"])
-@requires_auth
-def private():
-    response = "Hello from a private endpoint! You need to be authenticated to see this."
-    return jsonify(message=response)
-
-@app.route("/hello")
-@cross_origin(headers=["Content-Type", "Authorization"])
-def hello():
-    return jsonify(message="Hello world!")
 
 @app.get("/recommendations")
 @cross_origin(headers=["Content-Type", "Authorization"])
@@ -44,18 +33,6 @@ def post_recommendations():
     recommendations.insert_one(data)
     return jsonify(message="Recommendation added successfully")
 
-@app.post("/predict")
-def post_predict():
-    if "file" not in request.files:
-        return jsonify({"error": "No file part"}), 400
-
-    file = request.files["file"]
-    if file.filename == "":
-        return jsonify({"error": "No selected file"}), 400
-
-    predictions = model_predict(file.read())
-    return jsonify(predictions)
-
 @app.post("/gemini")
 @cross_origin()
 def post_gemini():
@@ -65,31 +42,14 @@ def post_gemini():
         if image_file:
             try:
                 image_bytes = image_file.read()
-
-                # Updated internal prompt based on the new schema
-                internal_prompt = (
-                "Please analyze the skin image shown in the provided image and generate the following details in JSON format:\n\n"
-                "1. **Skin Care Products (Morning)**: Provide a short list of skin care products that are suitable for use in the morning to address the skin condition shown in the image.\n"
-                "2. **Skin Care Products (Night)**: Provide a short list of skin care products that are suitable for use at night to address the skin condition.\n"
-                "3. **Skin Care Usage Instructions**: Provide a detailed description on how to use the recommended skin care products, including the correct way to apply them and any important tips based on the specific skin condition.\n"
-                "4. **Breakfast**: Provide a list of recommended foods for breakfast to help nourish the skin and body.\n"
-                "5. **Lunch**: Provide a list of recommended foods for lunch to help maintain good skin health and nutrition.\n"
-                "6. **Dinner**: Provide a list of recommended foods for dinner to support skin healing and overall health.\n\n"
-                "The response should be in JSON format with the following structure:\n\n"
-                "```json\n"
-                "{\n"
-                "    \"skin_care_product_list_morning\": [\"Product 1\", \"Product 2\", \"Product 3\"],\n"
-                "    \"skin_care_product_list_night\": [\"Product 1\", \"Product 2\", \"Product 3\"],\n"
-                "    \"skin_care_usage_instructions\": \"Instruction on how to apply the products for skin care.\",\n"
-                "    \"breakfast\": [\"Food 1\", \"Food 2\", \"Food 3\"],\n"
-                "    \"lunch\": [\"Food 1\", \"Food 2\", \"Food 3\"],\n"
-                "    \"dinner\": [\"Food 1\", \"Food 2\", \"Food 3\"]\n"
-                "}\n"
-                "```"
-            )
-
+                
+                predictions = model_predict(image_bytes)
+                predictions_json = json.dumps(predictions)
+                
+                internal_prompt = generate_prompt(predictions_json)
+                
                 generated = generate_response_with_image(internal_prompt, image_bytes)
-                return jsonify(generated)
+                return jsonify(dict(generated=generated, predictions=predictions)), 200
             except Exception as e:
                 return jsonify(error=f"Error processing image: {str(e)}"), 400
         else:
