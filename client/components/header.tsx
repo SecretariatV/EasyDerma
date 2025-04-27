@@ -43,7 +43,7 @@ export function Header({
           >
               {name}
           </h1>
-        <div className="flex flex-row items-center justify-end w-full h-full">
+        <div className="flex flex-row items-center justify-end w-full h-full pr-4">
           <AuthButtons
             isMorning={isMorning}
             isAuthenticated={isAuthenticated}
@@ -52,6 +52,5 @@ export function Header({
           />
         </div>
     </Card>
-    
   )
 }
