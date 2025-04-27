@@ -30,8 +30,8 @@ def generate_prompt(predictions: str):
                 f'By the way, take these predictions into account only if you are unsure: {predictions}\n\n the prediciton is the result of a softmax function'
             )
     
-MODEL_PATH = os.getenv('MODEL_PATH', '../model/cnn_model.keras')
-model = keras.models.load_model(MODEL_PATH)
+model_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "models", "cnn_model.keras")
+model = keras.models.load_model(model_path)
 
 names = [
     'Atopic Dermatitis',

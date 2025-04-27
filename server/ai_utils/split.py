@@ -1,16 +1,13 @@
 import os
 import random
 import shutil
-import dotenv
 
-dotenv.load_dotenv()
-
-ROOT = os.getenv("DATASET_ROOT")
+root_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "models")
 
 # Paths
-current_directory = os.path.join(ROOT, 'IMG_CLASSES')
-train_directory = os.path.join(ROOT, 'dataset', 'train')
-test_directory = os.path.join(ROOT, 'dataset', 'test')
+current_directory = os.path.join(root_dir, 'IMG_CLASSES')
+train_directory = os.path.join(root_dir, 'dataset', 'train')
+test_directory = os.path.join(root_dir, 'dataset', 'test')
 
 # Make sure train and test directories exist
 os.makedirs(train_directory, exist_ok=True)

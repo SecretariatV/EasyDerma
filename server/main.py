@@ -1,10 +1,10 @@
 import json
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
-from server.auth.auth import AuthError, requires_auth
-from server.db.db import recommendations
-from server.models.gemini import generate_response_with_image
-from server.ai_utils.utils import generate_prompt, model_predict
+from auth.auth import AuthError, requires_auth
+from db.db import recommendations
+from models.gemini import generate_response_with_image
+from ai_utils.utils import generate_prompt, model_predict
 
 app = Flask(__name__)
 

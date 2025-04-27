@@ -1,27 +1,23 @@
-from collections import Counter
-import numpy as np
-from tensorflow import keras
-from keras.src.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
-from keras import regularizers
-from sklearn.utils.class_weight import compute_class_weight
-import dotenv
 import os
-dotenv.load_dotenv()
-
+import numpy as np
 import tensorflow as tf
+from tensorflow import keras
+from keras import regularizers
+from keras.src.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
+from sklearn.utils.class_weight import compute_class_weight
+
+
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-DATASET_ROOT = os.getenv("DATASET_ROOT")
+dataset_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "models")
 
 print("Starting CNN model training...")
 
-# Run this script from the back-end directory of the project e.i. OncoVision/back-end
-
-train_data_dir = os.path.join(DATASET_ROOT, 'dataset/train')
+train_data_dir = os.path.join(dataset_root, "dataset", "train")
 
 img_height = 224
 img_width = 224
-num_classes = 10  # Number of classes (e.g., Malignant and Benign)
+num_classes = 10  # Number of classes
 
 train_ds = keras.utils.image_dataset_from_directory(
     directory = train_data_dir,
@@ -95,7 +91,7 @@ model.compile(optimizer="adam",
 
 print("Model compiled.")
 
-checkpoint = ModelCheckpoint('./checkpoint/cnn_model.keras', save_best_only=True, monitor='val_loss', mode='min')
+checkpoint = ModelCheckpoint(dataset_root, save_best_only=True, monitor='val_loss', mode='min')
 
 epochs = 60
 print("Starting model training...")
