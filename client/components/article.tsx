@@ -40,7 +40,7 @@ export function Article({
       >
         <CardHeader>
           <CardTitle
-            className={`text-2xl transition-colors duration-300 ${
+            className={`text-3xl transition-colors duration-300 ${
               isMorning ? "text-amber-900" : "text-indigo-900"
             }`}
           >
@@ -56,15 +56,19 @@ export function Article({
             <div className="space-y-6">
               <div>
                 <div>
-                  {Array.isArray(cardDescription) && cardDescription.length > 0 ? (
+                  {Array.isArray(cardDescription) &&
+                  cardDescription.length > 0 ? (
                     cardDescription.map((item, index) => (
-                      <ol key={index} className="list-disc list-inside">
+                      <ol
+                        key={index}
+                        className="list-disc list-inside space-y-1 text-lg text-gray-700"
+                      >
                         <li>{item}</li>
                       </ol>
                     ))
                   ) : (
                     <h4
-                      className={`text-md font-medium flex items-center gap-2 w-full transition-colors duration-300 ${
+                      className={`text-lg font-medium flex items-center gap-2 w-full transition-colors duration-300 ${
                         isMorning ? "text-amber-700" : "text-indigo-700"
                       }`}
                     >

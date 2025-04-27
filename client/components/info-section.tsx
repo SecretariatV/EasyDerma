@@ -29,7 +29,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
       >
         <CardHeader>
           <CardTitle
-            className={`text-2xl transition-colors duration-300 ${
+            className={`text-3xl transition-colors duration-300 ${
               isMorning ? "text-amber-900" : "text-indigo-900"
             }`}
           >
@@ -46,7 +46,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
             }`}
           >
             <h3
-              className={`text-lg font-semibold mb-4 transition-colors duration-300 ${
+              className={`text-2xl font-semibold mb-4 transition-colors duration-300 ${
                 isMorning ? "text-amber-800" : "text-indigo-800"
               }`}
             >
@@ -56,7 +56,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h4
-                    className={`text-sm font-medium flex items-center gap-2 transition-colors duration-300 ${
+                    className={`text-lg font-medium flex items-center gap-2 transition-colors duration-300 ${
                       isMorning ? "text-amber-700" : "text-indigo-700"
                     }`}
                   >
@@ -170,7 +170,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                 }`}
               >
                 <h4
-                  className={`text-sm font-medium mb-3 transition-colors duration-300 ${
+                  className={`text-2xl font-medium mb-3 transition-colors duration-300 ${
                     isMorning ? "text-amber-700" : "text-indigo-700"
                   }`}
                 >
@@ -183,13 +183,13 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                     }`}
                   >
                     <h5
-                      className={`font-medium mb-2 transition-colors duration-300 ${
+                      className={`text-lg font-medium mb-2 transition-colors duration-300 ${
                         isMorning ? "text-amber-800" : "text-indigo-800"
                       }`}
                     >
                       Breakfast
                     </h5>
-                    <ul className="space-y-1 text-md text-gray-700">
+                    <ul className="space-y-1 text-lg text-gray-700">
                       {data.generated.breakfast.map((item, index) => (
                         <li key={index}>• {item}</li>
                       ))}
@@ -201,13 +201,13 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                     }`}
                   >
                     <h5
-                      className={`font-medium mb-2 transition-colors duration-300 ${
+                      className={`text-lg font-medium mb-2 transition-colors duration-300 ${
                         isMorning ? "text-amber-800" : "text-indigo-800"
                       }`}
                     >
                       Lunch
                     </h5>
-                    <ul className="space-y-1 text-md text-gray-700">
+                    <ul className="space-y-1 text-lg text-gray-700">
                       {data.generated.lunch.map((item, index) => (
                         <li key={index}>• {item}</li>
                       ))}
@@ -219,13 +219,13 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                     }`}
                   >
                     <h5
-                      className={`font-medium mb-2 transition-colors duration-300 ${
+                      className={`text-lg font-medium mb-2 transition-colors duration-300 ${
                         isMorning ? "text-amber-800" : "text-indigo-800"
                       }`}
                     >
                       Dinner
                     </h5>
-                    <ul className="space-y-1 text-md text-gray-700">
+                    <ul className="space-y-1 text-lg text-gray-700">
                       {data.generated.dinner.map((item, index) => (
                         <li key={index}>• {item}</li>
                       ))}
