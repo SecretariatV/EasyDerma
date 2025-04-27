@@ -85,7 +85,7 @@ export default function Home(){
             <TodoList todos={todos} onToggle={toggleTodo} themeMode={themeMode} onThemeChange={handleThemeChange} />
           </div>
         </div>
-        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Skin care instructions" cardDescription={data ? data.generated.diagnosis : ""}/>
+        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Skin care instructions" cardDescription={data ? data.generated.skin_care_usage_instructions : ""}/>
         <InfoSection themeMode={themeMode} />
       </div>
     </main>
