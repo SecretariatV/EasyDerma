@@ -13,7 +13,7 @@ interface InfoSectionProps {
   themeMode: ThemeMode;
   isImageUploaded: boolean;
   cardHeader?: string;
-  cardDescription?: string;
+  cardDescription?: string | string[];
 }
 
 export function Article({
@@ -56,13 +56,21 @@ export function Article({
             <div className="space-y-6">
               <div>
                 <div>
-                  <h4
-                    className={`text-md font-medium flex items-center gap-2 w-full transition-colors duration-300 ${
-                      isMorning ? "text-amber-700" : "text-indigo-700"
-                    }`}
-                  >
-                    {cardDescription}
-                  </h4>
+                  {Array.isArray(cardDescription) && cardDescription.length > 0 ? (
+                    cardDescription.map((item, index) => (
+                      <ol key={index} className="list-disc list-inside">
+                        <li>{item}</li>
+                      </ol>
+                    ))
+                  ) : (
+                    <h4
+                      className={`text-md font-medium flex items-center gap-2 w-full transition-colors duration-300 ${
+                        isMorning ? "text-amber-700" : "text-indigo-700"
+                      }`}
+                    >
+                      {cardDescription}
+                    </h4>
+                  )}
                 </div>
               </div>
             </div>

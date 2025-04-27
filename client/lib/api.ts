@@ -14,7 +14,7 @@ interface DiagnosisResponse {
   breakfast: string[];
   lunch: string[];
   dinner: string[];
-  skin_care_usage_instructions: string;
+  skin_care_usage_instructions: string[];
   diagnosis: string;
 }
 
