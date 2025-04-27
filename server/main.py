@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from auth import AuthError, requires_auth
 from db import recommendations
+from gemini import generate_response
 
 app = Flask(__name__)
 
@@ -41,5 +42,14 @@ def post_recommendations():
     data["user_id"] = user_id
     recommendations.insert_one(data)
     return jsonify(message="Recommendation added successfully")
+
+
+@app.post("/gemini")
+@cross_origin()
+def post_gemini():
+    data = request.get_json()
+    generated = generate_response(data["prompt"])
+    return jsonify(generated)
+
 
 app.run(host="0.0.0.0", port=8080)

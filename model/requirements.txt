@@ -1,0 +1,2 @@
+tensorflow[and-cuda]
+scikit-learn

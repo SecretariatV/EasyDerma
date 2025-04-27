@@ -4,4 +4,4 @@ pyjwt
 flask-cors
 six
 pymongo[srv]
-python-dotenv
+google-genai
