@@ -185,7 +185,7 @@ export default function Home() {
         />
       </div>
       {isLoading && <div className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 flex items-center justify-center">
-        <p className="text-3xl text-white">Loading...</p>
+        <p className="text-3xl text-white animate-pulse">Loading...</p>
       </div>}
     </main>
   );
