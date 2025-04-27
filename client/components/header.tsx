@@ -22,7 +22,6 @@ export function Header({ name, isLoggedIn, onLogin, onLogout, themeMode }: Heade
         isMorning ? "bg-gradient-to-r from-amber-300 to-orange-300" : "bg-gradient-to-r from-indigo-50 to-purple-50"
       }`}
     >
-      <AuthButtons />
       <div className="flex items-center justify-between px-8 h-full">
         <div className="w-24" /> {/* Spacer for balance */}
         <h1
@@ -33,22 +32,7 @@ export function Header({ name, isLoggedIn, onLogin, onLogout, themeMode }: Heade
           {name}
         </h1>
         <div className="space-x-2">
-          {isLoggedIn ? (
-            <Button onClick={onLogout} variant="secondary" className="shadow-md hover:shadow-lg transition-all">
-              Logout
-            </Button>
-          ) : (
-            <Button
-              onClick={onLogin}
-              className={`shadow-md hover:shadow-lg transition-all ${
-                isMorning
-                  ? "bg-amber-600 hover:bg-amber-700 text-white"
-                  : "bg-indigo-600 hover:bg-indigo-700 text-white"
-              }`}
-            >
-              Login
-            </Button>
-          )}
+          <AuthButtons isMorning={isMorning}/>
         </div>
       </div>
     </Card>
