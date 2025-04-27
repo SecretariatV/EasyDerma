@@ -21,13 +21,14 @@ def generate_prompt(predictions: str):
                 "    \"diagnosis\": \"Detailed analysis of the skin issue if any\",\n"
                 "    \"skin_care_product_list_morning\": [\"Product 1\", \"Product 2\", \"Product 3\"],\n"
                 "    \"skin_care_product_list_night\": [\"Product 1\", \"Product 2\", \"Product 3\"],\n"
-                "    \"skin_care_usage_instructions\": \"Instruction on how to apply the products for skin care.\",\n"
+                "    \"skin_care_usage_instructions\": [\"Step 1\", \"Step 2\", \"Step 3\"],\n"
                 "    \"breakfast\": [\"Food 1\", \"Food 2\", \"Food 3\"],\n"
                 "    \"lunch\": [\"Food 1\", \"Food 2\", \"Food 3\"],\n"
                 "    \"dinner\": [\"Food 1\", \"Food 2\", \"Food 3\"]\n"
                 "}\n"
                 "```\n\n"
-                f'By the way, take these predictions into account only if you are unsure: {predictions}\n\n the prediciton is the result of a softmax function'
+                f'By the way, take these predictions into account only if you are unsure: {predictions}\n\n'
+                "If you do not see skin, please say that the image is not a skin image."
             )
     
 model_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "models", "cnn_model.keras")
