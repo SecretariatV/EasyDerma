@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from auth import AuthError, requires_auth
 from db import recommendations
-from gemini import generate_response_with_image, generate_response  # Assuming you'll create this function
+from gemini import generate_response_with_image
+from predict import model_predict
 
 app = Flask(__name__)
 
@@ -43,6 +44,17 @@ def post_recommendations():
     recommendations.insert_one(data)
     return jsonify(message="Recommendation added successfully")
 
+@app.post("/predict")
+def post_predict():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    predictions = model_predict(file.read())
+    return jsonify(predictions)
 
 @app.post("/gemini")
 @cross_origin()

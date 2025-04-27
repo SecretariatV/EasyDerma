@@ -19,8 +19,8 @@ print("Starting CNN model training...")
 
 train_data_dir = os.path.join(DATASET_ROOT, 'dataset/train')
 
-img_height = 512
-img_width = 512
+img_height = 224
+img_width = 224
 num_classes = 10  # Number of classes (e.g., Malignant and Benign)
 
 train_ds = keras.utils.image_dataset_from_directory(
@@ -87,16 +87,10 @@ model = keras.Sequential([
     keras.layers.Dense(num_classes, activation='softmax')
 ])
 
-# activate gpu
-physical_devices = keras.backend.tensorflow_backend._get_available_gpus()
-if physical_devices:
-    keras.backend.tensorflow_backend.set_session(keras.backend.tensorflow_backend.tf.Session(config=keras.backend.tensorflow_backend.tf.ConfigProto(gpu_options=keras.backend.tensorflow_backend.tf.GPUOptions(allow_growth=True))))
-    print(f"Using GPU: {physical_devices[0]}")
-else:
-    print("No GPU found. Using CPU.")
+
 
 model.compile(optimizer="adam",
-              loss="sparse_crossentropy",
+              loss="sparse_categorical_crossentropy",
               metrics=['accuracy'])
 
 print("Model compiled.")
@@ -105,6 +99,9 @@ checkpoint = ModelCheckpoint('./checkpoint/cnn_model.keras', save_best_only=True
 
 epochs = 60
 print("Starting model training...")
+
+print("Class weights: ", class_weight_dict)
+
 cancer_cnn_model = model.fit(
     train_ds,
     validation_data=validation_ds,

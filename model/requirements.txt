@@ -1,2 +1,5 @@
 tensorflow[and-cuda]
 scikit-learn
+dotenv
+numpy
+pillow
