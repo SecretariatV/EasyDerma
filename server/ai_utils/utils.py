@@ -31,7 +31,7 @@ def generate_prompt(predictions: str):
                 "If you do not see skin, please say that the image is not a skin image. Do not use markdown in the response. Also, do not enumerate with numbers in the lists"
             )
     
-model_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "models", "cnn_model.keras")
+model_path = os.path.join("models", "checkpoint", "cnn_model.keras")
 model = keras.models.load_model(model_path)
 
 names = [
