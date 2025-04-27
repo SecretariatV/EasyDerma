@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SaveNotification } from "@/components/save-notification";
 import { Article } from "@/components/article";
 
 import { Header } from "@/components/header";
@@ -38,15 +37,7 @@ export default function Home() {
     const lastData = await analysisAPI.last()
     setIsLoading(false);
     setData(lastData)
-    const todoList: Todo[] = []
-    if(lastData){
-      for(const todo of lastData.generated.skin_care_product_list_morning){
-        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "morning" })
-      }
-      for(const todo of lastData.generated.skin_care_product_list_night){
-        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "night" })
-      }
-    }
+    const todoList: Todo[] = await todosAPI.get()
     setTodos(todoList);
     const base64Image = lastData?.image;
     console.log("base64Image", base64Image)
@@ -72,36 +63,41 @@ export default function Home() {
     setData(newData);
     console.log("data", newData);
     const todoList: Todo[] = [];
+
+    async function addTodo(text: string, type: "morning" | "night") {
+      const todoObj = {
+        text: text,
+        completed: false,
+        time: type,
+      }
+
+      const {id} = await todosAPI.add(todoObj as Todo);
+      todoList.push({
+        ...todoObj,
+        id: id,
+      } as Todo);
+    }
+
+    todosAPI.deleteAll()
+
     if (newData) {
-      for (const todo of newData.generated.skin_care_product_list_morning) {
-        todoList.push({
-          id: todoList.length + 1,
-          text: todo,
-          completed: false,
-          time: "morning",
-        });
-      }
-      for (const todo of newData.generated.skin_care_product_list_night) {
-        todoList.push({
-          id: todoList.length + 1,
-          text: todo,
-          completed: false,
-          time: "night",
-        });
-      }
+      await Promise.all(
+        newData.generated.skin_care_product_list_morning.map((todo) => addTodo(todo, "morning"))
+      )
+
+      await Promise.all(
+        newData.generated.skin_care_product_list_night.map((todo) => addTodo(todo, "night"))
+      )
     }
     setTodos(todoList);
-    //todoList.deleteAll() notYetImplemented
-    for(const todo of todoList){
-      todosAPI.add(todo);
-    }
+    
     setIsImageUploaded(true)
   }
 
   const toggleTodo = (id: number) => {
     setTodos(todos.map((todo) => {
       if (todo.id === id) {
-        todosAPI.update(""+id, { ...todo, completed: !todo.completed });
+        todosAPI.update("" + id, { ...todo, completed: !todo.completed });
         return { ...todo, completed: !todo.completed };
       } else {
         return todo;
@@ -131,7 +127,7 @@ export default function Home() {
         <Article
           themeMode={themeMode}
           isImageUploaded={isImageUploaded}
-          cardHeader="Diagnosis details"
+          cardHeader="Diagnosis Report"
           cardDescription={data ? data.generated.diagnosis : ""}
         />
         <div className="flex flex-col md:flex-row gap-6">
@@ -170,6 +166,29 @@ export default function Home() {
       {isLoading && <div className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 flex items-center justify-center">
         <p className="text-3xl text-white">Loading...</p>
       </div>}
+
+      <Article
+        themeMode={themeMode}
+        isImageUploaded={isImageUploaded}
+        cardHeader="Our Raw AI Model's Prediction"
+        cardDescription=
+        {data && <div className="flex-col w-full">
+          {data.predictions.map((prediction, i) => (
+            <div key={i} className="flex flex-col">
+              <div
+                className="border-blue-500 border-b-4 rounded-t h-10 whitespace-nowrap flex ml-4 items-center"
+                style={{
+                  width: `${prediction.probability * 100}%`,
+                }}
+              >
+                {prediction.name + " " + Math.round(prediction.probability * 100) + "%"}
+              </div>
+            </div>
+          ))}
+        </div>}
+      />
+
+
     </main>
   );
 }

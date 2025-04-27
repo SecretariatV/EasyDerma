@@ -4,25 +4,25 @@ import { useAuth0 } from "@auth0/auth0-react"
 const API_URL = "https://driving-summary-piranha.ngrok-free.app"
 
 interface Prediction {
-  name: string;
-  probability: number;
+    name: string;
+    probability: number;
 }
 
 interface DiagnosisResponse {
-  skin_care_product_list_morning: string[];
-  skin_care_product_list_night: string[];
-  breakfast: string[];
-  lunch: string[];
-  dinner: string[];
-  skin_care_usage_instructions: string[];
-  diagnosis: string;
+    skin_care_product_list_morning: string[];
+    skin_care_product_list_night: string[];
+    breakfast: string[];
+    lunch: string[];
+    dinner: string[];
+    skin_care_usage_instructions: string[];
+    diagnosis: string;
 }
 
 export interface GeminiResponse {
-  generated: DiagnosisResponse;
-  predictions: Prediction[];
-  image: string;
-  timestamp: string;
+    generated: DiagnosisResponse;
+    predictions: Prediction[];
+    image: string;
+    timestamp: string;
 }
 
 export function useAnalysisAPI() {
@@ -50,7 +50,7 @@ export function useAnalysisAPI() {
                     "Accept": "application/json",
                 },
             })
-            
+
             if (!response.ok) {
                 return undefined;
             }
@@ -62,7 +62,7 @@ export function useAnalysisAPI() {
 
 export function useTodosAPI() {
     const auth0 = useAuth0()
-    
+
     return {
         get: async (): Promise<Todo[]> => {
             const response = await fetch(`${API_URL}/todos`, {
@@ -73,7 +73,7 @@ export function useTodosAPI() {
             })
             return response.json()
         },
-        add: async (todo: Todo) => {
+        add: async (todo: Todo): Promise<{ id: number }> => {
             const response = await fetch(`${API_URL}/todos`, {
                 method: "POST",
                 headers: {

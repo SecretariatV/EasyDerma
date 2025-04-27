@@ -88,6 +88,7 @@ def requires_auth(f):
                                     " token."}, 401)
 
             _request_ctx_stack.top.current_user = payload
+            
             return f(*args, **kwargs)
         raise AuthError({"code": "invalid_header",
                         "description": "Unable to find appropriate key"}, 401)
