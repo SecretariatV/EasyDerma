@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+from predict import model_predict
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from auth import AuthError, requires_auth
@@ -42,6 +46,18 @@ def post_recommendations():
     data["user_id"] = user_id
     recommendations.insert_one(data)
     return jsonify(message="Recommendation added successfully")
+
+@app.post("/predict")
+def post_predict():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    predictions = model_predict(file.read())
+    return jsonify(predictions)
 
 
 @app.post("/gemini")

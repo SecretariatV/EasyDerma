@@ -5,3 +5,4 @@ flask-cors
 six
 pymongo[srv]
 google-genai
+dotenv
