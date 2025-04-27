@@ -16,6 +16,7 @@ class Analysis(BaseModel):
     breakfast: list[str]
     lunch: list[str]
     dinner: list[str]
+    healthy: bool
 
 def generate_response_with_image(prompt, image_bytes):
     temp_filename = "temp_uploaded_image.jpg"

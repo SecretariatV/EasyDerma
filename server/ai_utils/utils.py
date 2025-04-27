@@ -19,6 +19,7 @@ def generate_prompt(predictions: str):
                 "```json\n"
                 "{\n"
                 "    \"diagnosis\": \"Detailed analysis of the skin issue if any\",\n"
+                "    \"healthy\": boolean,\n"
                 "    \"skin_care_product_list_morning\": [\"Product 1\", \"Product 2\", \"Product 3\"],\n"
                 "    \"skin_care_product_list_night\": [\"Product 1\", \"Product 2\", \"Product 3\"],\n"
                 "    \"skin_care_usage_instructions\": [\"Step 1\", \"Step 2\", \"Step 3\"],\n"
