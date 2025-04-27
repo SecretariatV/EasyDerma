@@ -22,7 +22,6 @@ export default function Home(){
     { id: 2, text: "Schedule team meeting", completed: false, time: "morning" },
     { id: 3, text: "Research new technologies", completed: false, time: "morning" },
     { id: 4, text: "Update documentation", completed: false, time: "night" },
-    { id: 5, text: "Review pull requests", completed: false, time: "night" },
   ])
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
   const [themeMode, setThemeMode] = useState<ThemeMode>("night")
