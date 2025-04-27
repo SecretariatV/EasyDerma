@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useLocalStorage } from "@/hooks/use-local-storage"
 import { SaveNotification } from "@/components/save-notification"
 import { Article } from "@/components/article"
 
@@ -11,7 +10,7 @@ import { TodoList } from "@/components/todo-list"
 import { InfoSection } from "@/components/info-section"
 import type { Todo } from "@/types/todo"
 import { useAuth0 } from "@auth0/auth0-react"
-import { GeminiResponse, generate } from "@/lib/api"
+import { GeminiResponse, generate, useTodosAPI } from "@/lib/api"
 
 export type ThemeMode = "morning" | "night"
 
@@ -19,9 +18,7 @@ export default function Home(){
   const [name, setName] = useState("Easy Derma")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [todos, setTodos] = useLocalStorage<Todo[]>("todos", [
-    // { id: 1, text: "Complete project proposal", completed: true, time: "morning" },
-  ])
+  const [todos, setTodos] = useState<Todo[]>([])
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
   const [themeMode, setThemeMode] = useState<ThemeMode>("night")
 
@@ -29,18 +26,27 @@ export default function Home(){
 
   const handleLogin = () => setIsLoggedIn(true)
   const handleLogout = () => setIsLoggedIn(false)
-
+  const todosAPI = useTodosAPI();
   const [data, setData] = useState<GeminiResponse>()
 
   const [isImageUploaded, setIsImageUploaded] = useState(false)
 
   const handleImageUpload = async (url: string, file: File) => {
     setImageUrl(url)
-    setData(await generate(file))
-    const todoList = [];
-    for(const todo of data!.generated.skin_care_product_list_morning){
-
+    const newData = await generate(file)
+    setData(newData)
+    console.log("data", newData);
+    const todoList: Todo[] = []
+    if(newData){
+      for(const todo of newData.generated.skin_care_product_list_morning){
+        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "morning" })
+      }
+      for(const todo of newData.generated.skin_care_product_list_night){
+        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "night" })
+      }
     }
+    console.log("to do list", todoList)
+    setTodos(todoList);
     setIsImageUploaded(true)
   }
 
