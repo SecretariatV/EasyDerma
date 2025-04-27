@@ -1,75 +1,43 @@
-import type React from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Apple, Beef, Carrot, Salad, Utensils, Wheat } from "lucide-react"
-import type { ThemeMode } from "@/app/page"
-
-interface DietaryCardProps {
-  icon: React.ReactNode
-  title: string
-  recommendation: string
-  description: string
-  color: string
-  morningColor: string
-  themeMode: ThemeMode
-}
-
-function DietaryCard({ icon, title, recommendation, description, color, morningColor, themeMode }: DietaryCardProps) {
-  const isMorning = themeMode === "morning"
-
-  return (
-    <Card className="border-none shadow-md hover:shadow-lg transition-all duration-300 bg-white/80 backdrop-blur-sm overflow-hidden">
-      <div className={`h-1 transition-colors duration-300 ${isMorning ? morningColor : color}`}></div>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle
-          className={`text-sm font-medium transition-colors duration-300 ${
-            isMorning ? "text-amber-900" : "text-indigo-900"
-          }`}
-        >
-          {title}
-        </CardTitle>
-        <div
-          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300 ${
-            isMorning ? "bg-amber-100 text-amber-700" : "bg-indigo-100 text-indigo-700"
-          }`}
-        >
-          {icon}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div
-          className={`text-xl font-bold transition-colors duration-300 ${
-            isMorning ? "text-amber-800" : "text-indigo-800"
-          }`}
-        >
-          {recommendation}
-        </div>
-        <CardDescription className="text-xs mt-1">{description}</CardDescription>
-      </CardContent>
-    </Card>
-  )
-}
+import type React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Salad, Utensils, Wheat } from "lucide-react";
+import type { ThemeMode } from "@/app/page";
+import { GeminiResponse } from "@/lib/api";
 
 interface InfoSectionProps {
-  themeMode: ThemeMode
+  themeMode: ThemeMode;
+  data: GeminiResponse;
 }
 
-export function InfoSection({ themeMode }: InfoSectionProps) {
-  const isMorning = themeMode === "morning"
+export function InfoSection({ themeMode, data }: InfoSectionProps) {
+  const isMorning = themeMode === "morning";
 
   return (
     <section className="w-full mt-8">
       <Card
         className={`border-none shadow-xl overflow-hidden transition-colors duration-300 ${
-          isMorning ? "bg-gradient-to-r from-amber-50 to-orange-50" : "bg-gradient-to-r from-indigo-50 to-purple-50"
+          isMorning
+            ? "bg-gradient-to-r from-amber-50 to-orange-50"
+            : "bg-gradient-to-r from-indigo-50 to-purple-50"
         }`}
       >
         <CardHeader>
           <CardTitle
-            className={`text-2xl transition-colors duration-300 ${isMorning ? "text-amber-900" : "text-indigo-900"}`}
+            className={`text-2xl transition-colors duration-300 ${
+              isMorning ? "text-amber-900" : "text-indigo-900"
+            }`}
           >
             General Dietary Recommendations
           </CardTitle>
-          <CardDescription>Personalized nutrition guidelines for a balanced and healthy diet</CardDescription>
+          <CardDescription>
+            Personalized nutrition guidelines for a balanced and healthy diet
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div
@@ -101,7 +69,10 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Maintain a caloric balance appropriate for your age, gender, and activity level</span>
+                      <span>
+                        Maintain a caloric balance appropriate for your age,
+                        gender, and activity level
+                      </span>
                     </li>
                     <li className="text-gray-600 flex items-start">
                       <span
@@ -109,7 +80,9 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Include a variety of foods from all food groups</span>
+                      <span>
+                        Include a variety of foods from all food groups
+                      </span>
                     </li>
                     <li className="text-gray-600 flex items-start">
                       <span
@@ -117,7 +90,9 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Limit intake of added sugars, sodium, and saturated fats</span>
+                      <span>
+                        Limit intake of added sugars, sodium, and saturated fats
+                      </span>
                     </li>
                     <li className="text-gray-600 flex items-start">
                       <span
@@ -125,7 +100,10 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Stay hydrated by drinking plenty of water throughout the day</span>
+                      <span>
+                        Stay hydrated by drinking plenty of water throughout the
+                        day
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -144,7 +122,10 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Eat a rainbow of colorful fruits and vegetables for diverse nutrients</span>
+                      <span>
+                        Eat a rainbow of colorful fruits and vegetables for
+                        diverse nutrients
+                      </span>
                     </li>
                     <li className="text-gray-600 flex items-start">
                       <span
@@ -152,7 +133,10 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Choose lean proteins and plant-based protein sources when possible</span>
+                      <span>
+                        Choose lean proteins and plant-based protein sources
+                        when possible
+                      </span>
                     </li>
                     <li className="text-gray-600 flex items-start">
                       <span
@@ -160,7 +144,10 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Include healthy fats from sources like avocados, nuts, and olive oil</span>
+                      <span>
+                        Include healthy fats from sources like avocados, nuts,
+                        and olive oil
+                      </span>
                     </li>
                     <li className="text-gray-600 flex items-start">
                       <span
@@ -168,7 +155,10 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                           isMorning ? "bg-amber-500" : "bg-indigo-500"
                         }`}
                       ></span>
-                      <span>Limit processed foods and opt for whole, unprocessed alternatives</span>
+                      <span>
+                        Limit processed foods and opt for whole, unprocessed
+                        alternatives
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -200,10 +190,9 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                       Breakfast
                     </h5>
                     <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Oatmeal with berries and nuts</li>
-                      <li>• Greek yogurt with honey</li>
-                      <li>• Whole grain toast with avocado</li>
-                      <li>• Green tea or coffee</li>
+                      {data.generated.breakfast.map((item, index) => (
+                        <li key={index}>• {item}</li>
+                      ))}
                     </ul>
                   </div>
                   <div
@@ -219,10 +208,9 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                       Lunch
                     </h5>
                     <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Grilled chicken salad with mixed greens</li>
-                      <li>• Quinoa bowl with roasted vegetables</li>
-                      <li>• Whole grain wrap with hummus and vegetables</li>
-                      <li>• Water with lemon</li>
+                      {data.generated.lunch.map((item, index) => (
+                        <li key={index}>• {item}</li>
+                      ))}
                     </ul>
                   </div>
                   <div
@@ -238,10 +226,9 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
                       Dinner
                     </h5>
                     <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Baked salmon with steamed vegetables</li>
-                      <li>• Lentil soup with whole grain bread</li>
-                      <li>• Stir-fry with tofu and brown rice</li>
-                      <li>• Herbal tea or water</li>
+                      {data.generated.dinner.map((item, index) => (
+                        <li key={index}>• {item}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -251,5 +238,5 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
         </CardContent>
       </Card>
     </section>
-  )
+  );
 }
