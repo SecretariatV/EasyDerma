@@ -21,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clientId="QJ4fV7PXM6v9wqkBvovjII1yR6lPmnzL"
       authorizationParams={{
         redirect_uri: origin,
+        audience: 'server'
       }}
     >
       {children}
