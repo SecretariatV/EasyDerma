@@ -68,19 +68,25 @@ export default function Home() {
         });
       }
     }
-    console.log("to do list", todoList);
     setTodos(todoList);
-    setIsImageUploaded(true);
-  };
+    //todoList.deleteAll() notYetImplemented
+    for(const todo of todoList){
+      todosAPI.add(todo);
+    }
+    setIsImageUploaded(true)
+  }
 
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-    setShowSaveNotification(true);
-  };
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        todosAPI.update(""+id, { ...todo, completed: !todo.completed });
+        return { ...todo, completed: !todo.completed };
+      } else {
+        return todo;
+      }
+    }));
+    setShowSaveNotification(true)
+  }
 
   const handleThemeChange = (mode: ThemeMode) => {
     setThemeMode(mode);
