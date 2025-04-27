@@ -11,7 +11,7 @@ import { TodoList } from "@/components/todo-list"
 import { InfoSection } from "@/components/info-section"
 import type { Todo } from "@/types/todo"
 import { useAuth0 } from "@auth0/auth0-react"
-import { generate } from "@/lib/api"
+import { GeminiResponse, generate } from "@/lib/api"
 
 export type ThemeMode = "morning" | "night"
 
@@ -33,11 +33,14 @@ export default function Home(){
   const handleLogin = () => setIsLoggedIn(true)
   const handleLogout = () => setIsLoggedIn(false)
 
-  const [data, setData] = useState<string | null>(null)
+  const [data, setData] = useState<GeminiResponse>()
+
+  const [isImageUploaded, setIsImageUploaded] = useState(false)
 
   const handleImageUpload = async (url: string, file: File) => {
     setImageUrl(url)
     setData(await generate(file))
+    setIsImageUploaded(true)
   }
 
   const toggleTodo = (id: number) => {
@@ -67,12 +70,12 @@ export default function Home(){
           isAuthenticated={isAuthenticated}
         />
 
-        <Article themeMode={themeMode} />
+        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Diagnosis details" cardDescription={data ? data.generated.diagnosis : ""}/>
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
           <ImageUpload
             imageUrl={imageUrl} onImageUpload={handleImageUpload} themeMode={themeMode}
-            isAuthenticated={isAuthenticated}
+            isAuthenticated={true}
             loginWithRedirect={loginWithRedirect}
             logout={logout}
           />
@@ -82,7 +85,7 @@ export default function Home(){
             <TodoList todos={todos} onToggle={toggleTodo} themeMode={themeMode} onThemeChange={handleThemeChange} />
           </div>
         </div>
-        <Article themeMode={themeMode} />
+        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Skin care instructions" cardDescription={data ? data.generated.diagnosis : ""}/>
         <InfoSection themeMode={themeMode} />
       </div>
     </main>
