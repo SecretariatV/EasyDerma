@@ -1,83 +1,121 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { SaveNotification } from "@/components/save-notification"
-import { Article } from "@/components/article"
+import { useEffect, useState } from "react";
+import { SaveNotification } from "@/components/save-notification";
+import { Article } from "@/components/article";
 
-import { Header } from "@/components/header"
-import { ImageUpload } from "@/components/image-upload"
-import { TodoList } from "@/components/todo-list"
-import { InfoSection } from "@/components/info-section"
-import type { Todo } from "@/types/todo"
-import { useAuth0 } from "@auth0/auth0-react"
-import { GeminiResponse, useAnalysisAPI, useTodosAPI } from "@/lib/api"
+import { Header } from "@/components/header";
+import { ImageUpload } from "@/components/image-upload";
+import { TodoList } from "@/components/todo-list";
+import { InfoSection } from "@/components/info-section";
+import type { Todo } from "@/types/todo";
+import { useAuth0 } from "@auth0/auth0-react";
+import { GeminiResponse, useAnalysisAPI, useTodosAPI } from "@/lib/api";
 
-export type ThemeMode = "morning" | "night"
+export type ThemeMode = "morning" | "night";
 
-export default function Home(){
-  const [name, setName] = useState("Easy Derma")
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [todos, setTodos] = useState<Todo[]>([])
+export default function Home() {
+  const [name, setName] = useState("Easy Derma");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
-  const [themeMode, setThemeMode] = useState<ThemeMode>("night")
+  const [themeMode, setThemeMode] = useState<ThemeMode>("night");
 
-  const [showSaveNotification, setShowSaveNotification] = useState(false)
+  const [showSaveNotification, setShowSaveNotification] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => setIsLoggedIn(true)
-  const handleLogout = () => setIsLoggedIn(false)
+  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogout = () => setIsLoggedIn(false);
   const todosAPI = useTodosAPI();
-  const analysisAPI = useAnalysisAPI()
-  const [data, setData] = useState<GeminiResponse>()
+  const analysisAPI = useAnalysisAPI();
+  const [data, setData] = useState<GeminiResponse>();
 
-  const [isImageUploaded, setIsImageUploaded] = useState(false)
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   async function onLogin() {
+    setIsLoading(true);
     const lastData = await analysisAPI.last()
+    setIsLoading(false);
     setData(lastData)
-    console.log("data", lastData);
+    const todoList: Todo[] = []
+    if(lastData){
+      for(const todo of lastData.generated.skin_care_product_list_morning){
+        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "morning" })
+      }
+      for(const todo of lastData.generated.skin_care_product_list_night){
+        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "night" })
+      }
+    }
+    setTodos(todoList);
+    const base64Image = lastData?.image;
+    console.log("base64Image", base64Image)
+    if (base64Image) {
+      const imageBlob = await fetch(base64Image).then((res) => res.blob())
+      const url = URL.createObjectURL(imageBlob)
+      setImageUrl(url)
+    }
+    setIsImageUploaded(true);
   }
 
   useEffect(() => {
     if (isAuthenticated) {
-      onLogin()      
+      onLogin();
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
   const handleImageUpload = async (url: string, file: File) => {
-    setImageUrl(url)
-    const newData = await analysisAPI.create(file)
-    setData(newData)
+    setImageUrl(url);
+    setIsLoading(true);
+    const newData = await analysisAPI.create(file);
+    setIsLoading(false);
+    setData(newData);
     console.log("data", newData);
-    const todoList: Todo[] = []
-    if(newData){
-      for(const todo of newData.generated.skin_care_product_list_morning){
-        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "morning" })
+    const todoList: Todo[] = [];
+    if (newData) {
+      for (const todo of newData.generated.skin_care_product_list_morning) {
+        todoList.push({
+          id: todoList.length + 1,
+          text: todo,
+          completed: false,
+          time: "morning",
+        });
       }
-      for(const todo of newData.generated.skin_care_product_list_night){
-        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "night" })
+      for (const todo of newData.generated.skin_care_product_list_night) {
+        todoList.push({
+          id: todoList.length + 1,
+          text: todo,
+          completed: false,
+          time: "night",
+        });
       }
     }
-    console.log("to do list", todoList)
     setTodos(todoList);
+    //todoList.deleteAll() notYetImplemented
+    for(const todo of todoList){
+      todosAPI.add(todo);
+    }
     setIsImageUploaded(true)
   }
 
   const toggleTodo = (id: number) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)))
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        todosAPI.update(""+id, { ...todo, completed: !todo.completed });
+        return { ...todo, completed: !todo.completed };
+      } else {
+        return todo;
+      }
+    }));
     setShowSaveNotification(true)
   }
 
   const handleThemeChange = (mode: ThemeMode) => {
-    setThemeMode(mode)
-  }
+    setThemeMode(mode);
+  };
 
   return (
-    <main
-      className={
-        `min-h-screen p-4 md:p-8 transition-colors duration-300`
-      }
-    >
+    <main className={`min-h-screen p-4 md:p-8 transition-colors duration-300`}>
       <div className="container mx-auto max-w-6xl">
         <Header
           name={name}
@@ -85,29 +123,53 @@ export default function Home(){
           onLogin={handleLogin}
           onLogout={handleLogout}
           themeMode={themeMode}
-          loginWithRedirect={loginWithRedirect} 
+          loginWithRedirect={loginWithRedirect}
           logout={logout}
           isAuthenticated={isAuthenticated}
         />
 
-        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Diagnosis details" cardDescription={data ? data.generated.diagnosis : ""}/>
+        <Article
+          themeMode={themeMode}
+          isImageUploaded={isImageUploaded}
+          cardHeader="Diagnosis details"
+          cardDescription={data ? data.generated.diagnosis : ""}
+        />
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
-          <ImageUpload
-            imageUrl={imageUrl} onImageUpload={handleImageUpload} themeMode={themeMode}
-            isAuthenticated={true}
-            loginWithRedirect={loginWithRedirect}
-            logout={logout}
-          />
+            <ImageUpload
+              imageUrl={imageUrl}
+              onImageUpload={handleImageUpload}
+              themeMode={themeMode}
+              isAuthenticated={isAuthenticated}
+              loginWithRedirect={loginWithRedirect}
+              logout={logout}
+            />
           </div>
 
           <div className="w-full md:w-2/5">
-            <TodoList todos={todos} onToggle={toggleTodo} themeMode={themeMode} onThemeChange={handleThemeChange} />
+            <TodoList
+              todos={todos}
+              onToggle={toggleTodo}
+              themeMode={themeMode}
+              onThemeChange={handleThemeChange}
+            />
           </div>
         </div>
-        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Skin care instructions" cardDescription={data ? data.generated.diagnosis : ""}/>
-        <InfoSection themeMode={themeMode} />
+        <Article
+          themeMode={themeMode}
+          isImageUploaded={isImageUploaded}
+          cardHeader="Skin care instructions"
+          cardDescription={
+            data ? data.generated.skin_care_usage_instructions : ""
+          }
+        />
+        {data && data.generated.lunch.length > 0 && (
+          <InfoSection themeMode={themeMode} data={data} />
+        )}
       </div>
+      {isLoading && <div className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 flex items-center justify-center">
+        <p className="text-3xl text-white">Loading...</p>
+      </div>}
     </main>
-  )
+  );
 }

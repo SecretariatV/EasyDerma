@@ -14,13 +14,15 @@ interface DiagnosisResponse {
   breakfast: string[];
   lunch: string[];
   dinner: string[];
-  skin_care_usage_instructions: string;
+  skin_care_usage_instructions: string[];
   diagnosis: string;
 }
 
 export interface GeminiResponse {
   generated: DiagnosisResponse;
   predictions: Prediction[];
+  image: string;
+  timestamp: string;
 }
 
 export function useAnalysisAPI() {
@@ -92,7 +94,15 @@ export function useTodosAPI() {
                 body: JSON.stringify(todo),
             })
             return response.json()
+        },
+        deleteAll: async () => {
+            const response = await fetch(`${API_URL}/todos`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${await auth0.getAccessTokenSilently()}`,
+                },
+            })
+            return response.json()
         }
-        
     }
 }
