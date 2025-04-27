@@ -8,15 +8,25 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { ThemeMode } from "@/app/page"
+import { is } from "date-fns/locale"
+import { AuthButtons } from "@/AuthButtons"
+import type { LogoutOptions } from "@auth0/auth0-react"
 
 interface ImageUploadProps {
   imageUrl: string | null
   onImageUpload: (url: string) => void
   themeMode: ThemeMode
+  isAuthenticated: boolean
+  loginWithRedirect: () => void
+  logout: (options?: LogoutOptions) => Promise<void>
 }
 
-export function ImageUpload({ imageUrl, onImageUpload, themeMode }: ImageUploadProps) {
+export function ImageUpload({ 
+  imageUrl, onImageUpload, themeMode, isAuthenticated,
+  loginWithRedirect, logout
+ }: ImageUploadProps) {
   const isMorning = themeMode === "morning"
+  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -52,12 +62,13 @@ export function ImageUpload({ imageUrl, onImageUpload, themeMode }: ImageUploadP
               isMorning ? "text-amber-600" : "text-indigo-500"
             }`}
           >
-            No image uploaded
+            {isAuthenticated ? "Upload your image" : "Log in to upload an image"}
           </p>
         </div>
       )}
       <div className="absolute bottom-6">
-        <Label
+        {isAuthenticated ? (<>
+          <Label
           htmlFor="image-upload"
           className={`cursor-pointer px-6 py-3 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 ${
             isMorning ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-indigo-600 hover:bg-indigo-700 text-white"
@@ -66,7 +77,13 @@ export function ImageUpload({ imageUrl, onImageUpload, themeMode }: ImageUploadP
           <Upload className="w-4 h-4" />
           Upload Image
         </Label>
-        <Input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+          <Input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} /> </>) : 
+        (<AuthButtons
+          isMorning={isMorning}
+          isAuthenticated={isAuthenticated}
+          loginWithRedirect={loginWithRedirect}
+          logout={logout}
+        />)}
       </div>
     </Card>
   )

@@ -11,9 +11,15 @@ interface HeaderProps {
   onLogin: () => void
   onLogout: () => void
   themeMode: ThemeMode
+  loginWithRedirect: () => void
+  logout: () => void
+  isAuthenticated: boolean
 }
 
-export function Header({ name, isLoggedIn, onLogin, onLogout, themeMode }: HeaderProps) {
+export function Header({ 
+  name, isLoggedIn, onLogin, onLogout, themeMode,
+  loginWithRedirect, logout, isAuthenticated
+ }: HeaderProps) {
   const isMorning = themeMode === "morning"
 
   return (
@@ -32,7 +38,12 @@ export function Header({ name, isLoggedIn, onLogin, onLogout, themeMode }: Heade
           {name}
         </h1>
         <div className="space-x-2">
-          <AuthButtons isMorning={isMorning}/>
+          <AuthButtons
+            isMorning={isMorning}
+            isAuthenticated={isAuthenticated}
+            loginWithRedirect={loginWithRedirect}
+            logout={logout}
+          />
         </div>
       </div>
     </Card>

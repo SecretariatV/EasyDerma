@@ -2,9 +2,21 @@
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import type { LogoutOptions } from '@auth0/auth0-react';
 
-export function AuthButtons( {isMorning}: {isMorning: boolean}) {
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+export function AuthButtons( {
+    isMorning,
+    isAuthenticated,
+    loginWithRedirect,
+    logout
+}: {
+    isMorning: boolean;
+    isAuthenticated: boolean;
+    loginWithRedirect: () => void;
+    logout: (options?: LogoutOptions) => void
+}) {
+  
 
   return (
     <div>

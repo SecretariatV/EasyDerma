@@ -9,6 +9,7 @@ import { ImageUpload } from "@/components/image-upload"
 import { TodoList } from "@/components/todo-list"
 import { InfoSection } from "@/components/info-section"
 import type { Todo } from "@/types/todo"
+import { useAuth0 } from "@auth0/auth0-react"
 
 export type ThemeMode = "morning" | "night"
 
@@ -23,6 +24,7 @@ export default function Home() {
     { id: 4, text: "Update documentation", completed: false, time: "night" },
     { id: 5, text: "Review pull requests", completed: false, time: "night" },
   ])
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
   const [themeMode, setThemeMode] = useState<ThemeMode>("night")
 
   const [showSaveNotification, setShowSaveNotification] = useState(false)
@@ -56,11 +58,19 @@ export default function Home() {
           onLogin={handleLogin}
           onLogout={handleLogout}
           themeMode={themeMode}
+          loginWithRedirect={loginWithRedirect} 
+          logout={logout}
+          isAuthenticated={isAuthenticated}
         />
 
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
-            <ImageUpload imageUrl={imageUrl} onImageUpload={handleImageUpload} themeMode={themeMode} />
+          <ImageUpload 
+            imageUrl={imageUrl} onImageUpload={handleImageUpload} themeMode={themeMode}
+            isAuthenticated={isAuthenticated}
+            loginWithRedirect={loginWithRedirect}
+            logout={logout}
+          />
           </div>
 
           <div className="w-full md:w-2/5">
