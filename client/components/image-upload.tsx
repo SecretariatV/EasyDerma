@@ -14,7 +14,7 @@ import type { LogoutOptions } from "@auth0/auth0-react"
 
 interface ImageUploadProps {
   imageUrl: string | null
-  onImageUpload: (url: string) => void
+  onImageUpload: (url: string, file: File) => void
   themeMode: ThemeMode
   isAuthenticated: boolean
   loginWithRedirect: () => void
@@ -32,7 +32,7 @@ export function ImageUpload({
     const file = e.target.files?.[0]
     if (file) {
       const url = URL.createObjectURL(file)
-      onImageUpload(url)
+      onImageUpload(url, file)
     }
   }
 
@@ -66,7 +66,7 @@ export function ImageUpload({
           </p>
         </div>
       )}
-      <div className="absolute bottom-6">
+      <div className="absolute bottom-10">
         {isAuthenticated ? (<>
           <Label
           htmlFor="image-upload"
