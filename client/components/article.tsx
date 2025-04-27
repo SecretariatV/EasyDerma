@@ -13,7 +13,7 @@ interface InfoSectionProps {
   themeMode: ThemeMode;
   isImageUploaded: boolean;
   cardHeader?: string;
-  cardDescription?: string | string[];
+  cardDescription?: React.ReactNode | string[];
 }
 
 export function Article({
