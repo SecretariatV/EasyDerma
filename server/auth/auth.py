@@ -1,3 +1,4 @@
+from urllib.request import urlopen
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -6,6 +7,7 @@ import json
 from functools import wraps
 from flask import request, _request_ctx_stack
 
+from jwt.algorithms import RSAAlgorithm
 import jwt
 import os
 
@@ -50,13 +52,13 @@ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = get_token_auth_header()
-        jsonurl = request.urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+        jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
         jwks = json.loads(jsonurl.read())
         unverified_header = jwt.get_unverified_header(token)
         public_key = None
         for key in jwks["keys"]:
             if key["kid"] == unverified_header["kid"]:
-                public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwks))
+                public_key = RSAAlgorithm.from_jwk(json.dumps(key))
         if public_key:
             try:
                 payload = jwt.decode(

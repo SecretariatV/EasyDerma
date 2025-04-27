@@ -12,6 +12,6 @@ except Exception as e:
     print(e)
 
 db = client.get_database("skin")
-recommendations = db.get_collection("recommendations")
+todos = db.get_collection("todos")
 
 print(os.getenv("MONGODB_URI"))

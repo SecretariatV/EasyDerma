@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from auth.auth import AuthError, requires_auth
-from db.db import recommendations
+from db.db import todos
 from models.gemini import generate_response_with_image
 from ai_utils.utils import generate_prompt, model_predict
 
@@ -14,24 +14,35 @@ def handle_auth_error(ex):
     response.status_code = ex.status_code
     return response
 
-@app.get("/recommendations")
-@cross_origin(headers=["Content-Type", "Authorization"])
-# @requires_auth
-def get_recommendations():
-    output = recommendations.find({
+@app.get("/todos")
+@cross_origin()
+@requires_auth
+def get_todos():
+    output = todos.find({
         "user_id": request.args.get("user_id")
     }).to_list()
-    return jsonify(recommendations=output)
+    return jsonify(output)
 
-@app.post("/recommendations")
-@cross_origin(headers=["Content-Type", "Authorization"])
-# @requires_auth
-def post_recommendations():
+@app.post("/todos")
+@cross_origin()
+@requires_auth
+def post_todos():
     user_id = request.args.get("user_id")
     data = request.get_json()
     data["user_id"] = user_id
-    recommendations.insert_one(data)
-    return jsonify(message="Recommendation added successfully")
+    data["id"] = todos.count_documents({}) + 1
+    todos.insert_one(data)
+    return jsonify(message="ok")
+
+@app.put("/todos/<todo_id>")
+@cross_origin()
+@requires_auth
+def put_todos(todo_id):
+    user_id = request.args.get("user_id")
+    data = request.get_json()
+    data["user_id"] = user_id
+    todos.update_one({"id": int(todo_id), "user_id": user_id}, {"$set": data})
+    return jsonify(message="ok")
 
 @app.post("/gemini")
 @cross_origin()
@@ -60,4 +71,4 @@ def post_gemini():
 
 
 
-app.run(host="0.0.0.0", port=8080, debug=True)
+app.run(host="0.0.0.0", port=8080)
