@@ -10,6 +10,7 @@ import { TodoList } from "@/components/todo-list"
 import { InfoSection } from "@/components/info-section"
 import type { Todo } from "@/types/todo"
 import { useAuth0 } from "@auth0/auth0-react"
+import { generate } from "@/lib/api"
 
 export type ThemeMode = "morning" | "night"
 
@@ -32,8 +33,11 @@ export default function Home(){
   const handleLogin = () => setIsLoggedIn(true)
   const handleLogout = () => setIsLoggedIn(false)
 
-  const handleImageUpload = (url: string) => {
+  const [data, setData] = useState<string | null>(null)
+
+  const handleImageUpload = async (url: string, file: File) => {
     setImageUrl(url)
+    setData(await generate(file))
   }
 
   const toggleTodo = (id: number) => {
