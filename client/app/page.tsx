@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useLocalStorage } from "@/hooks/use-local-storage"
 import { SaveNotification } from "@/components/save-notification"
+import { Article } from "@/components/article"
 
 import { Header } from "@/components/header"
 import { ImageUpload } from "@/components/image-upload"
@@ -23,7 +24,6 @@ export default function Home(){
     { id: 2, text: "Schedule team meeting", completed: false, time: "morning" },
     { id: 3, text: "Research new technologies", completed: false, time: "morning" },
     { id: 4, text: "Update documentation", completed: false, time: "night" },
-    { id: 5, text: "Review pull requests", completed: false, time: "night" },
   ])
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
   const [themeMode, setThemeMode] = useState<ThemeMode>("night")
@@ -67,6 +67,7 @@ export default function Home(){
           isAuthenticated={isAuthenticated}
         />
 
+        <Article themeMode={themeMode} />
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
           <ImageUpload
@@ -81,9 +82,8 @@ export default function Home(){
             <TodoList todos={todos} onToggle={toggleTodo} themeMode={themeMode} onThemeChange={handleThemeChange} />
           </div>
         </div>
-
+        <Article themeMode={themeMode} />
         <InfoSection themeMode={themeMode} />
-        <SaveNotification show={showSaveNotification} themeMode={themeMode} />
       </div>
     </main>
   )
