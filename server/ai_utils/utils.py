@@ -11,7 +11,7 @@ def generate_prompt(predictions: str):
                 "1. **Diagnosis**: Provide your diagnosis based on the provided image\n\n"
                 "2. **Skin Care Products (Morning)**: Provide a short list of skin care products that are suitable for use in the morning to address the skin condition shown in the image.\n"
                 "3. **Skin Care Products (Night)**: Provide a short list of skin care products that are suitable for use at night to address the skin condition.\n"
-                "4. **Skin Care Usage Instructions**: Provide a detailed description on how to use the recommended skin care products, including the correct way to apply them and any important tips based on the specific skin condition.\n"
+                "4. **Skin Care Usage Instructions**: If a legitimate skin image is detected, provide a detailed description on how to use the recommended skin care products, including the correct way to apply them and any important tips based on the specific skin condition. If np skin is detected, return empty array\n"
                 "5. **Breakfast**: Provide a list of recommended foods for breakfast to help nourish the skin and body.\n"
                 "6. **Lunch**: Provide a list of recommended foods for lunch to help maintain good skin health and nutrition.\n"
                 "7. **Dinner**: Provide a list of recommended foods for dinner to support skin healing and overall health.\n\n"
