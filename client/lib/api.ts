@@ -16,6 +16,7 @@ interface DiagnosisResponse {
   dinner: string[];
   skin_care_usage_instructions: string[];
   diagnosis: string;
+  healthy: boolean
 }
 
 export interface GeminiResponse {

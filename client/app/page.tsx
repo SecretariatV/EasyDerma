@@ -172,34 +172,36 @@ export default function Home() {
           <InfoSection themeMode={themeMode} data={data} />
         )}
 
-        {data && data.generated.skin_care_usage_instructions.length > 0 && (
-          <Article
-            themeMode={themeMode}
-            isImageUploaded={isImageUploaded}
-            cardHeader="Our Convolutional Neural Network AI Model's Prediction"
-            cardDescription={
-              data && (
-                <div className="flex-col w-full">
-                  {data.predictions.map((prediction, i) => (
-                    <div key={i} className="flex flex-col">
-                      <div
-                        className="border-blue-500 border-b-4 rounded-t h-10 whitespace-nowrap flex ml-4 items-center"
-                        style={{
-                          width: `${prediction.probability * 100}%`,
-                        }}
-                      >
-                        {prediction.name +
-                          " " +
-                          Math.round(prediction.probability * 100) +
-                          "%"}
+        {data &&
+          data.generated.skin_care_usage_instructions.length > 0 &&
+          !data.generated.healthy && (
+            <Article
+              themeMode={themeMode}
+              isImageUploaded={isImageUploaded}
+              cardHeader="Our Convolutional Neural Network AI Model's Prediction"
+              cardDescription={
+                data && (
+                  <div className="flex-col w-full">
+                    {data.predictions.map((prediction, i) => (
+                      <div key={i} className="flex flex-col">
+                        <div
+                          className="border-blue-500 border-b-4 rounded-t h-10 whitespace-nowrap flex ml-4 items-center"
+                          style={{
+                            width: `${prediction.probability * 100}%`,
+                          }}
+                        >
+                          {prediction.name +
+                            " " +
+                            Math.round(prediction.probability * 100) +
+                            "%"}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )
-            }
-          />
-        )}
+                    ))}
+                  </div>
+                )
+              }
+            />
+          )}
       </div>
       {isLoading && (
         <div className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 flex items-center justify-center">
