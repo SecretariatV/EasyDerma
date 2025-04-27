@@ -44,7 +44,7 @@ export function TodoList({ todos, onToggle, themeMode, onThemeChange }: TodoList
             isMorning ? "text-amber-800 border-amber-200" : "text-indigo-800 border-indigo-200"
           }`}
         >
-          To-Do List
+          {isMorning ? "Morning" : "Night"} Routine
         </h2>
 
         {/* Time Toggle */}
