@@ -189,7 +189,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                     >
                       Breakfast
                     </h5>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <ul className="space-y-1 text-md text-gray-700">
                       {data.generated.breakfast.map((item, index) => (
                         <li key={index}>• {item}</li>
                       ))}
@@ -207,7 +207,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                     >
                       Lunch
                     </h5>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <ul className="space-y-1 text-md text-gray-700">
                       {data.generated.lunch.map((item, index) => (
                         <li key={index}>• {item}</li>
                       ))}
@@ -225,7 +225,7 @@ export function InfoSection({ themeMode, data }: InfoSectionProps) {
                     >
                       Dinner
                     </h5>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <ul className="space-y-1 text-md text-gray-700">
                       {data.generated.dinner.map((item, index) => (
                         <li key={index}>• {item}</li>
                       ))}
