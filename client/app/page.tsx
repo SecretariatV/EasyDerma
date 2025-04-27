@@ -58,13 +58,23 @@ export default function Home(){
         todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "night" })
       }
     }
-    console.log("to do list", todoList)
     setTodos(todoList);
+    //todoList.deleteAll() notYetImplemented
+    for(const todo of todoList){
+      todosAPI.add(todo);
+    }
     setIsImageUploaded(true)
   }
 
   const toggleTodo = (id: number) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)))
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        todosAPI.update(""+id, { ...todo, completed: !todo.completed });
+        return { ...todo, completed: !todo.completed };
+      } else {
+        return todo;
+      }
+    }));
     setShowSaveNotification(true)
   }
 

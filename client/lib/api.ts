@@ -21,6 +21,8 @@ interface DiagnosisResponse {
 export interface GeminiResponse {
   generated: DiagnosisResponse;
   predictions: Prediction[];
+  image: string;
+  timestamp: string;
 }
 
 export function useAnalysisAPI() {
