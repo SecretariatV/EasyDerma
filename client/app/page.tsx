@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useLocalStorage } from "@/hooks/use-local-storage"
 import { SaveNotification } from "@/components/save-notification"
+import { Article } from "@/components/article"
 
 import { Header } from "@/components/header"
 import { ImageUpload } from "@/components/image-upload"
@@ -66,6 +67,7 @@ export default function Home(){
           isAuthenticated={isAuthenticated}
         />
 
+        <Article themeMode={themeMode} />
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
           <ImageUpload
@@ -80,9 +82,8 @@ export default function Home(){
             <TodoList todos={todos} onToggle={toggleTodo} themeMode={themeMode} onThemeChange={handleThemeChange} />
           </div>
         </div>
-
+        <Article themeMode={themeMode} />
         <InfoSection themeMode={themeMode} />
-        <SaveNotification show={showSaveNotification} themeMode={themeMode} />
       </div>
     </main>
   )

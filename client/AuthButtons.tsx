@@ -22,7 +22,7 @@ export function AuthButtons( {
 
   return (
     <div>
-      <Button disabled={!isAuthenticated && label != "Log In"} onClick={() => {
+      <Button onClick={() => {
         if(isAuthenticated) {
           logout({ logoutParams: { returnTo: window.location.origin } });
         }
