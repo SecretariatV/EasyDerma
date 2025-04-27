@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import type { ThemeMode } from "@/app/page"
 import { AuthButtons } from "@/AuthButtons"
+import Image from "next/image"
+import logo from "@/public/logo.png"
 
 interface HeaderProps {
   name: string
@@ -24,20 +26,24 @@ export function Header({
 
   return (
     <Card
-      className={`w-full h-32 mb-6 overflow-hidden border-none shadow-lg transition-colors duration-300 ${
-        isMorning ? "bg-gradient-to-r from-amber-300 to-orange-300" : "bg-gradient-to-r from-indigo-50 to-purple-50"
+      className={`flex flex-row w-full items-center justify-between px-2 h-32 
+        mb-6 overflow-hidden border-none shadow-lg transition-colors duration-300 
+        ${
+        isMorning ? "bg-gradient-to-r from-amber-300 to-orange-300" : 
+        "bg-gradient-to-r from-indigo-50 to-purple-50"
       }`}
     >
-      <div className="flex items-center justify-between px-8 h-full">
-        <div className="w-24" /> {/* Spacer for balance */}
+        <div className="flex flex-row items-center justify-left w-full h-full">
+          <Image src={logo} className="w-auto h-full" alt="Uploaded image"/>
+        </div>
         <h1
-          className={`text-3xl font-bold drop-shadow-sm transition-colors duration-300 ${
-            isMorning ? "text-amber-900" : "text-indigo-900"
-          }`}
-        >
-          {name}
-        </h1>
-        <div className="space-x-2">
+              className={`text-3xl font-bold drop-shadow-sm transition-colors duration-300 whitespace-nowrap ${
+                isMorning ? "text-amber-900" : "text-indigo-900"
+              }`}
+          >
+              {name}
+          </h1>
+        <div className="flex flex-row items-center justify-end w-full h-full">
           <AuthButtons
             isMorning={isMorning}
             isAuthenticated={isAuthenticated}
@@ -45,7 +51,6 @@ export function Header({
             logout={logout}
           />
         </div>
-      </div>
     </Card>
     
   )

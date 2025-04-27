@@ -13,8 +13,8 @@ import { useAuth0 } from "@auth0/auth0-react"
 
 export type ThemeMode = "morning" | "night"
 
-export default function Home() {
-  const [name, setName] = useState("John Doe")
+export default function Home(){
+  const [name, setName] = useState("Easy Derma")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [todos, setTodos] = useLocalStorage<Todo[]>("todos", [
@@ -47,9 +47,9 @@ export default function Home() {
 
   return (
     <main
-      className={`min-h-screen p-4 md:p-8 transition-colors duration-300 ${
-        themeMode === "morning" ? "bg-gradient-to-br from-amber-50 to-orange-50" : "bg-gradient-pattern"
-      }`}
+      className={
+        `min-h-screen p-4 md:p-8 transition-colors duration-300`
+      }
     >
       <div className="container mx-auto max-w-6xl">
         <Header
@@ -65,7 +65,7 @@ export default function Home() {
 
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
-          <ImageUpload 
+          <ImageUpload
             imageUrl={imageUrl} onImageUpload={handleImageUpload} themeMode={themeMode}
             isAuthenticated={isAuthenticated}
             loginWithRedirect={loginWithRedirect}
