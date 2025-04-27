@@ -67,52 +67,13 @@ export function InfoSection({ themeMode }: InfoSectionProps) {
           <CardTitle
             className={`text-2xl transition-colors duration-300 ${isMorning ? "text-amber-900" : "text-indigo-900"}`}
           >
-            Dietary Recommendations
+            General Dietary Recommendations
           </CardTitle>
           <CardDescription>Personalized nutrition guidelines for a balanced and healthy diet</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <DietaryCard
-              icon={<Beef size={18} />}
-              title="Proteins"
-              recommendation="0.8g per kg of body weight"
-              description="Focus on lean meats, fish, eggs, and plant-based proteins"
-              color="bg-red-400"
-              morningColor="bg-amber-500"
-              themeMode={themeMode}
-            />
-            <DietaryCard
-              icon={<Wheat size={18} />}
-              title="Carbohydrates"
-              recommendation="45-65% of daily calories"
-              description="Choose whole grains and complex carbohydrates"
-              color="bg-amber-400"
-              morningColor="bg-amber-400"
-              themeMode={themeMode}
-            />
-            <DietaryCard
-              icon={<Carrot size={18} />}
-              title="Vegetables"
-              recommendation="3-5 servings daily"
-              description="Aim for variety and different colors for diverse nutrients"
-              color="bg-green-400"
-              morningColor="bg-amber-300"
-              themeMode={themeMode}
-            />
-            <DietaryCard
-              icon={<Apple size={18} />}
-              title="Fruits"
-              recommendation="2-4 servings daily"
-              description="Focus on whole fruits rather than juices for fiber"
-              color="bg-purple-400"
-              morningColor="bg-amber-600"
-              themeMode={themeMode}
-            />
-          </div>
-
           <div
-            className={`mt-8 p-6 rounded-lg shadow-inner transition-colors duration-300 ${
+            className={` p-6 rounded-lg shadow-inner transition-colors duration-300 ${
               isMorning ? "bg-amber-50/90" : "bg-white/90"
             }`}
           >

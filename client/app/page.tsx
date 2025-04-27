@@ -20,10 +20,7 @@ export default function Home(){
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [todos, setTodos] = useLocalStorage<Todo[]>("todos", [
-    { id: 1, text: "Complete project proposal", completed: true, time: "morning" },
-    { id: 2, text: "Schedule team meeting", completed: false, time: "morning" },
-    { id: 3, text: "Research new technologies", completed: false, time: "morning" },
-    { id: 4, text: "Update documentation", completed: false, time: "night" },
+    // { id: 1, text: "Complete project proposal", completed: true, time: "morning" },
   ])
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
   const [themeMode, setThemeMode] = useState<ThemeMode>("night")
@@ -40,6 +37,10 @@ export default function Home(){
   const handleImageUpload = async (url: string, file: File) => {
     setImageUrl(url)
     setData(await generate(file))
+    const todoList = [];
+    for(const todo of data!.generated.skin_care_product_list_morning){
+
+    }
     setIsImageUploaded(true)
   }
 
