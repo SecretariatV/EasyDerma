@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 from auth.auth import AuthError, requires_auth
-from db.db import todos
+from db.db import todos, generations
 from models.gemini import generate_response_with_image
 from ai_utils.utils import generate_prompt, model_predict
 
@@ -44,9 +44,22 @@ def put_todos(todo_id):
     todos.update_one({"id": int(todo_id), "user_id": user_id}, {"$set": data})
     return jsonify(message="ok")
 
-@app.post("/gemini")
+@app.get("/analysis")
 @cross_origin()
-def post_gemini():
+@requires_auth
+def get_analysis():
+    user_id = request.args.get("user_id")
+    last_generation = generations.find_one({"user_id": user_id})
+    if last_generation:
+        last_generation['_id'] = str(last_generation['_id'])
+        return jsonify(last_generation)
+    else:
+        return jsonify(error="No previous generation found."), 404
+
+@app.post("/analysis")
+@cross_origin()
+@requires_auth
+def post_analysis():
     if 'image' in request.files:
         image_file = request.files['image']
 
@@ -60,7 +73,17 @@ def post_gemini():
                 internal_prompt = generate_prompt(predictions_json)
                 
                 generated = generate_response_with_image(internal_prompt, image_bytes)
-                return jsonify(dict(generated=generated, predictions=predictions)), 200
+                out = dict(generated=generated, predictions=predictions)
+                generations.replace_one(
+                    {"user_id": request.args.get("user_id")},
+                    {
+                        "user_id": request.args.get("user_id"),
+                        "predictions": predictions,
+                        "generated": generated
+                    },
+                    upsert=True
+                )
+                return jsonify(out), 200
             except Exception as e:
                 return jsonify(error=f"Error processing image: {str(e)}"), 400
         else:

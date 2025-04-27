@@ -23,20 +23,39 @@ export interface GeminiResponse {
   predictions: Prediction[];
 }
 
+export function useAnalysisAPI() {
+    const auth0 = useAuth0()
 
+    return {
+        create: async (image: Blob): Promise<GeminiResponse> => {
+            const formData = new FormData()
+            formData.append("image", image)
+            const response = await fetch(`${API_URL}/analysis`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Authorization: `Bearer ${await auth0.getAccessTokenSilently()}`,
+                    "Accept": "application/json",
+                },
+            })
+            return response.json()
+        },
+        last: async (): Promise<GeminiResponse | undefined> => {
+            const response = await fetch(`${API_URL}/analysis`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${await auth0.getAccessTokenSilently()}`,
+                    "Accept": "application/json",
+                },
+            })
+            
+            if (!response.ok) {
+                return undefined;
+            }
 
-export async function generate(image: Blob): Promise<GeminiResponse> {
-    const formData = new FormData()
-    formData.append("image", image)
-    const out = await fetch(`${API_URL}/gemini`, {
-      method: "POST",
-        body: formData,
-        headers: {
-          "Accept": "application/json",
-      },
-    })
-
-    return out.json()
+            return response.json()
+        },
+    }
 }
 
 export function useTodosAPI() {
