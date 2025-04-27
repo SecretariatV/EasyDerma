@@ -33,7 +33,6 @@ export default function Home() {
   const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   async function onLogin() {
-<<<<<<< HEAD
     const lastData = await analysisAPI.last()
     setData(lastData)
     const todoList: Todo[] = []
@@ -54,11 +53,6 @@ export default function Home() {
       setImageUrl(url)
     }
     setIsImageUploaded(true);
-=======
-    const lastData = await analysisAPI.last();
-    setData(lastData);
-    console.log("data", lastData);
->>>>>>> df3e777fa41eef4f7bea266cb598922b2e8a644f
   }
 
   useEffect(() => {
@@ -68,15 +62,6 @@ export default function Home() {
   }, [isAuthenticated]);
 
   const handleImageUpload = async (url: string, file: File) => {
-<<<<<<< HEAD
-    setImageUrl(url)
-    const newData = await analysisAPI.create(file)
-    setData(newData)
-    const todoList: Todo[] = []
-    if(newData){
-      for(const todo of newData.generated.skin_care_product_list_morning){
-        todoList.push({ id: todoList.length + 1, text: todo, completed: false, time: "morning" })
-=======
     setImageUrl(url);
     const newData = await analysisAPI.create(file);
     setData(newData);
@@ -90,7 +75,6 @@ export default function Home() {
           completed: false,
           time: "morning",
         });
->>>>>>> df3e777fa41eef4f7bea266cb598922b2e8a644f
       }
       for (const todo of newData.generated.skin_care_product_list_night) {
         todoList.push({
@@ -139,16 +123,12 @@ export default function Home() {
           isAuthenticated={isAuthenticated}
         />
 
-<<<<<<< HEAD
-        <Article themeMode={themeMode} isImageUploaded={isImageUploaded} cardHeader="Diagnosis details" cardDescription={data?.generated.diagnosis ?? ""}/>
-=======
         <Article
           themeMode={themeMode}
           isImageUploaded={isImageUploaded}
           cardHeader="Diagnosis details"
           cardDescription={data ? data.generated.diagnosis : ""}
         />
->>>>>>> df3e777fa41eef4f7bea266cb598922b2e8a644f
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-3/5">
             <ImageUpload
