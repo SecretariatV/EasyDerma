@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SaveNotification } from "@/components/save-notification"
 import { Article } from "@/components/article"
 
@@ -10,7 +10,7 @@ import { TodoList } from "@/components/todo-list"
 import { InfoSection } from "@/components/info-section"
 import type { Todo } from "@/types/todo"
 import { useAuth0 } from "@auth0/auth0-react"
-import { GeminiResponse, generate, useTodosAPI } from "@/lib/api"
+import { GeminiResponse, useAnalysisAPI, useTodosAPI } from "@/lib/api"
 
 export type ThemeMode = "morning" | "night"
 
@@ -27,13 +27,26 @@ export default function Home(){
   const handleLogin = () => setIsLoggedIn(true)
   const handleLogout = () => setIsLoggedIn(false)
   const todosAPI = useTodosAPI();
+  const analysisAPI = useAnalysisAPI()
   const [data, setData] = useState<GeminiResponse>()
 
   const [isImageUploaded, setIsImageUploaded] = useState(false)
 
+  async function onLogin() {
+    const lastData = await analysisAPI.last()
+    setData(lastData)
+    console.log("data", lastData);
+  }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      onLogin()      
+    }
+  }, [isAuthenticated])
+
   const handleImageUpload = async (url: string, file: File) => {
     setImageUrl(url)
-    const newData = await generate(file)
+    const newData = await analysisAPI.create(file)
     setData(newData)
     console.log("data", newData);
     const todoList: Todo[] = []

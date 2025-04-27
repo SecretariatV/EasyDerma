@@ -12,7 +12,7 @@ class Analysis(BaseModel):
     diagnosis: str
     skin_care_product_list_morning: list[str]
     skin_care_product_list_night: list[str]
-    skin_care_usage_instructions: str
+    skin_care_usage_instructions: list[str]
     breakfast: list[str]
     lunch: list[str]
     dinner: list[str]
@@ -28,7 +28,11 @@ def generate_response_with_image(prompt, image_bytes):
 
     response = client.models.generate_content(
         model="gemini-2.0-flash",
-        contents=[uploaded_file, "\n\n", prompt]
+        contents=[uploaded_file, "\n\n", prompt],
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": Analysis
+        }
     )
     
     prefix = "```json\n"
