@@ -77,7 +77,7 @@ export function ImageUpload({
           <Upload className="w-4 h-4" />
           Upload Image
         </Label>
-          <Input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} /> </>) : 
+          <Input id="image-upload" type="file" accept="image/jpeg" className="hidden" onChange={handleImageUpload} /> </>) : 
         (<AuthButtons
           label="Log In To Upload"
           isMorning={isMorning}
